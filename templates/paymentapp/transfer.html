@@ -1,0 +1,38 @@
+{% extends 'paymentapp/home.html' %}
+{% load crispy_forms_tags %}
+{% load notifications_tags %}
+{% block title %} Transfer Amount{% endblock %}
+
+{% block content %}
+    <div class="container rounded bg-light mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+            </div>
+            <div class="col-md-6">
+                <div class="p-5 mb-4 bg-light rounded-3">
+                    <main class="px-3">
+                        {% if page_type == 'Direct'  %}
+                        <form action="pay_money" method="post">
+                            <h2>Send Money</h2>
+                            {% csrf_token %}
+                            {{ form | crispy  }}
+                            <button type="submit" class="btn text-white btn-block color_common">Send</button>
+                        </form>
+                        {% endif %}
+
+                        {% if page_type == 'Request'  %}
+                            <form action="request_money" method="post">
+                                <h2>Request Money</h2>
+                                {% csrf_token %}
+                                {{ form | crispy  }}
+                                <button type="submit" class="btn text-white btn-block color_common">Request</button>
+                            </form>
+                        {% endif %}
+                    </main>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

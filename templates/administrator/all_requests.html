@@ -1,0 +1,81 @@
+{% extends 'administrator/admin_home.html' %}
+
+{% block nav %}
+    <nav class="nav nav-masthead  w-100 mx-auto  justify-content-start">
+        <!--<a class="nav-link text-white" aria-current="page" href="home">Profile</a>-->
+
+        <div class="navbar-collapse justify-content-end">
+            <div class="nav-item">
+                <form method="GET" action="/webapps2023/admin">
+                    <button type="submit" data-toggle="logout_model" class="btn btn-outline-light">Back</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+
+{% block content %}
+    {% if requests.has_other_pages %}
+        </br>
+        <form method="GET" action="{{request.get_full_path}}">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a type="submit" {% if requests.has_previous %} href="?page={{ requests.previous_page_number }}&type={{ type }}" class="page-link " {% else %} class="page-link disabled" {% endif %}  >Previous</a>
+                    </li>
+                    {% for item in total_page %}
+                        <li class="page-item color_common">
+                            <a type="submit" class="page-link {% if requests.number == item %} active color_common {% endif %}" href="?page={{ item }}&type={{ type }}">{{ item }}</a>
+                        </li>
+                    {% endfor %}
+
+                    <li class="page-item">
+                        <a type="submit" {% if requests.has_next %} href="?page={{ requests.next_page_number }}&type={{ type }}" class="page-link" {% else %} class="page-link disabled" {% endif %} >Next</a>
+                    </li>
+
+                </ul>
+            </nav>
+        </form>
+    {% endif %}
+    <div class="container rounded bg-light">
+        {% if requests|length == 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>No records to show.</strong></div>
+        {% else %}
+        <table class="table table-striped ">
+            <thead>
+            <tr>
+                <th class="col">ID</th>
+                <th>Title</th>
+                <th>Create date</th>
+                <th>Create Time</th>
+
+                <th>User</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Receiver</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in requests %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.create_at }}</td>
+                    <td>{{ item.time }}</td>
+                    <td>{{ item.request_sender  }}</td>
+
+
+                    <td>{{ item.requested_amount }} {{ item.requested_currency }}</td>
+                    <td>{{ item.request_answer }}</td>
+                    <td>{{ item.request_receiver }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
+{% endblock %}

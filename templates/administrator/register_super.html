@@ -1,0 +1,31 @@
+{% extends 'administrator/admin_home.html' %}
+{% load crispy_forms_tags %}
+
+{% block nav %}
+    <nav class="nav nav-masthead  w-100 mx-auto  justify-content-start">
+        <!--<a class="nav-link text-white" aria-current="page" href="home">Profile</a>-->
+
+        <div class="navbar-collapse justify-content-end">
+            <div class="nav-item">
+                <form method="GET" action="/webapps2023/admin">
+                    <button type="submit" class="btn btn-outline-light">Back</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container rounded bg-light">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>You are about to create a staff user</strong>
+        </div>
+        </br>
+        <form method="POST" action="/webapps2023/admin/register_admin/">
+            {% csrf_token  %}
+            {{ form | crispy  }}
+            <button type="submit" class="btn btn-success">Register</button>
+            <br>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'webapps/base.html' %}
+{% load static %}
+{% load notifications_tags %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block nav %}
+    <nav class="nav nav-masthead  w-100 mx-auto  justify-content-start">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item ">
+                <a class="nav-link text-white " aria-current="page" href="home">{% if request.path == '/webapps2023/home' %} <b>Home</b> {% else %}Home{% endif %}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white " href="profile">{% if request.path == '/webapps2023/profile' %} <b>Profile</b> {% else %}Profile{% endif %}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white " href="transactions?page=1">{% if request.path == '/webapps2023/transactions' %} <b>Transactions</b> {% else %}Transactions{% endif %}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white " href="request_history?page=1">{% if request.path == '/webapps2023/request_history' %} <b>Requests</b> {% else %}Requests{% endif %}</a>
+            </li>
+                <div class="nav-link text-white">
+                    {% notifications_unread as unread %}
+                        <div id="notification_bage" class="position-absolute top-0 start-1 translate-top badge rounded-pill bg-danger">{% live_notify_badge badge_class="notify_badge_class" %}</div>
+                        <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/></svg>
+                        </button>
+                    <div class="dropdown-menu">
+                        {% live_notify_list %}
+                    </div>
+                </div>
+        </ul>
+
+        <div class="navbar-collapse justify-content-end">
+            <div class="nav-item ">
+                <div class="text-white text-justify " style="padding-right: 10px">Username: <b>{{ user.username }}</b>   </div>
+            </div>
+            <div class="nav-item">
+                <form method="GET" action="register/sign_out">
+                    <button type="submit" data-toggle="logout_model" class="btn btn-outline-light">Sign out</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container rounded bg-light mt-5 mb-5">
+    </div>
+    <div class="row g-0">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="p-5 mb-3 bg-light rounded-3">
+                <div class="px-3 text-center container-fluid py-5">
+                    <h1 class="h2">Welcome {{  user.first_name }} {{ user.last_name }}</h1>
+                    <h3 class="h2">
+                        <b>Current Balance: </b><u>{{ profile.balance }} {{ profile.currency}}</u>
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3">
+                            <form method="GET" action="pay_money">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-lg btn-secondary fw-bold border-light form-control color_common">Pay</button>
+                            </form>
+                        </div>
+                        <div class="col-md-3">
+                            <form method="GET" action="request_money">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-lg btn-secondary fw-bold border-light form-control color_common">Request</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

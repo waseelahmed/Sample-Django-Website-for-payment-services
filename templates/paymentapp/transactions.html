@@ -1,0 +1,113 @@
+{% extends 'paymentapp/home.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Transactions History{% endblock %}
+
+{% block content %}
+    <div class="container" >
+        <div class="row p-md-5">
+            <form method="GET" action="{{request.get_full_path}}">
+                {%  csrf_token %}
+                <div class="row">
+                    <div class="col-6">
+                        <div>
+                            {{ filter_form | crispy }}
+                            <input name="action" class="btn btn-outline-dark {% if filter_form.filter_applied %} active {% elif filter_form.errors %} disabled {% endif %}" type="submit" value="Apply"/>
+                            <input name="action" class="btn btn-outline-dark {% if not filter_form.filter_applied and not filter_form.errors %} disabled {% endif %} " type="submit" value="Clear"/>
+                        </div>
+                    </div>
+                <div class="col-6">
+                    {% if page.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-end">
+                                <li class="page-item">
+                                    <button type="submit" name="page_number" {% if page.has_previous %} class="page-link" value="{{ page.previous_page_number }}" {% else %} class="page-link disabled" {% endif %} >Previous</button>
+                                </li>
+                                {% for item in total_page %}
+                                    <li class="page-item color_common">
+                                        <button name="page_number" type="submit" value="{{item}}"  class="page-link {% if page.number == item %} active color_common text-white {% endif %}">{{item}}</button>
+                                    </li>
+                                {% endfor %}
+                                <li class="page-item">
+                                    <button type="submit" name="page_number" {% if page.has_next %} class="page-link" value="{{ page.next_page_number }}"{% else %} class="page-link disabled" {% endif %} >Next</button>
+                                </li>
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+
+                </div>
+                <div>
+
+                </div>
+                <div class="row mt-5">
+                    {% if data|length == 0 %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>No records to show.</strong></div>
+                    {% elif form.has_error %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>{{ form.errors }}</strong></div>
+                    {% else %}
+
+                        <div class="row g-0">
+                            <div class="">
+                                {% block table %}
+                                    <div class="h2 font-weight-bold">Transaction History</div>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Time</th>
+                                                <th scope="col">Amount</th>
+                                                <th scope="col">Balance</th>
+                                                <th scope="col">Type</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for item in data %}
+                                                <tr id="spacing-row">
+                                                    <td class="pt-3 mt-2"></td>
+                                                </tr>
+                                                <tr class="bg-blue">
+                                                    <td class="pt-3"> {{ item.id }}
+                                                        {% if item.is_new %}
+                                                            <span class="position-flex top-0 start-1 translate-top text-white rounded-pill bg-danger">New</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="pt-3">
+                                                        <div class="pl-lg-5 pl-md-3 pl-1 name" title="{{ item.description }}">{{ item.full_name }}</div>
+
+                                                    </td>
+                                                    <td class="pt-3"> {{ item.date }}</td>
+                                                    <td class="pt-3"><span class="fa fa-check pl-3"> {{ item.time}}</span></td>
+                                                    <td class="pt-3"> <span class="fa fa-check pl-3">
+                                                    {% if item.trend == 'Decreased' %}
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle-fill" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                                                        </svg>
+                                                    {% elif item.trend == 'Increased' %}
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                                                        </svg>
+                                                    {% endif %}
+                                                        {{ item.amount }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="pt-3"><span class="fa fa-check pl-3"> {{ item.balance }}</span></td>
+                                                    <td class="pt-3"><span title="{{ item.res_date }}" class="fa fa-check pl-3">{{ item.direction }} - {{ item.res_mode }} </span></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endblock  %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

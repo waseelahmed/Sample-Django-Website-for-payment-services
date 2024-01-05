@@ -1,0 +1,84 @@
+{% extends 'paymentapp/transactions.html' %}
+{% block title %}Request History{% endblock %}
+
+{% block table %}
+    <div class="h2 font-weight-bold">Requests History</div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Incoming/Outgoing</th>
+                <th scope="col">Respond Time</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <input type="hidden" name="current_page" value="{{ page.number }}">
+            {% for item in data %}
+                <tr id="spacing-row">
+                    <td class="pt-3 mt-2"></td>
+                </tr>
+                <tr class="bg-blue">
+
+                    <td class="pt-3"> {{ item.ID }}
+                        {% if item.is_new %}
+                            <span class="position-flex top-0 start-1 translate-top text-white rounded-pill bg-danger">New</span>
+                        {% endif %}
+                    </td>
+                    <td class="pt-3">
+                        <div class="pl-lg-5 pl-md-3 pl-1 name" title="{{ item.description }}">{{ item.full_name }}</div>
+
+                    </td>
+                    <td class="pt-3"> {{ item.date }}</td>
+                    <td class="pt-3"> {{ item.time }}</td>
+                    <td class="pt-3"><span class="fa fa-check pl-3">{{ item.amount}}</span></td>
+                    <td class="pt-3"> <span class="fa fa-check pl-3">
+                        {% if item.inc_out == 'Outgoing' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/></svg>
+                        {% endif %}
+                        {% if item.inc_out == 'Incoming' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/></svg>
+                        {% endif %}
+                        {{ item.inc_out }}</span>
+                    </td>
+                    <td class="pt-3">
+                        <span class="fa fa-check pl-3">
+                            {% if item.status == 'Pending' %}
+                                Not Approved
+                            {% else %}
+                                {{ item.seen  }}
+                            {% endif %}
+                        </span>
+                    </td>
+                    {% if item.inc_out == 'Outgoing' and  item.status == 'Pending' %}
+                        <td>
+                            <button type="button" class="btn btn-secondary disabled">Waiting</button>
+                        </td>
+                    {% elif item.inc_out == 'Incoming' and  item.status == 'Pending' %}
+                        <td>
+                            <button type="submit"  name="Accept" value="{{item.ID}}" class="btn btn-success">Accept</button>
+                            <button type="submit" name="Decline" value="{{item.ID}}" class="btn btn-danger" >Decline</button>
+                        </td>
+                    {% elif item.status == 'Approved' %}
+                        <td>
+                            <button type="button" class="btn btn-primary disabled">Approved</button>
+                        </td>
+                    {% elif item.status == 'Cancelled' %}
+                        <td>
+                            <button type="button" class="btn btn-danger disabled">Cancelled</button>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+{% endblock %}
+
+

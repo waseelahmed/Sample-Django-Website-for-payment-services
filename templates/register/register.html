@@ -1,0 +1,28 @@
+{% extends 'register/login.html' %}
+{% load crispy_forms_tags %} }
+
+
+{% block login_heading %}
+    Register User
+{% endblock %}
+
+{% block information %}
+        <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link"  title="Already have an account" id="tab-login" style="color: black" data-mdb-toggle="pill" href="user?action=signin" role="tab"
+                   aria-controls="pills-login" aria-selected="false">Login</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active color_common" id="tab-register" title="Create here to register" data-mdb-toggle="pill" href="user?action=signup" role="tab"
+                   aria-controls="pills-register" aria-selected="true">Register</a>
+            </li>
+        </ul>
+    {% csrf_token %}
+    <form method="POST" action="register_user">
+        {% csrf_token  %}
+        {{ form | crispy  }}
+        <button type="submit" class="btn btn-success">Register</button>
+        <br>
+    </form>
+
+{% endblock %}

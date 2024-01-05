@@ -1,0 +1,54 @@
+{% extends 'webapps/base.html' %}
+
+{% load crispy_forms_tags %}
+{% block title %} Login Page {% endblock%}
+{% block content %}
+
+{% block nav %}
+    <div class="navbar-collapse justify-content-center">
+            <div class="nav-item">
+                <a class="btn  btn-outline-light" href="/webapps2023">Back</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+    <div class="row g-0">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="container-sm bg-light rounded-3">
+            <h2 class="text-center">
+                {% block login_heading %}
+                    Sign-In
+                {% endblock %}
+            </h2>
+
+            <div class="py-5">
+                <div>
+                    {% csrf_token %}
+                    {% block information %}
+                        <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active color_common"  title="Already have an account" id="tab-login" data-mdb-toggle="pill" href="user?action=signin" role="tab"
+                                   aria-controls="pills-login" aria-selected="true"> Login</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-register" style="color: black; display: block"  title="Create here to register" data-mdb-toggle="pill" href="user?action=signup" role="tab"
+                                   aria-controls="pills-register" aria-selected="true">Register</a>
+                            </li>
+                        </ul>
+                        <form method="POST" action="sign_in">
+                            {% csrf_token %}
+                            {{ form | crispy  }}
+                            <button type="submit" class="btn text-white color_common" >Login</button>
+                            <br>
+                        </form>
+
+                    {% endblock %}
+                </div>
+            </div>
+        </div></div>
+
+
+    </div>
+{% endblock %}

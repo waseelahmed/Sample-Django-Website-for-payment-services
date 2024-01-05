@@ -1,0 +1,79 @@
+{% extends 'paymentapp/home.html' %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+    <form method="POST" action="profile">
+        {% csrf_token %}
+    <div class="container rounded bg-light mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">@{{ user.username }}</span><span class="text-black-50">{{ user.email }}</span><span> </span></div>
+            </div>
+            <div class="col-md-8 border-right">
+                <div class="p-3 py-6">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Profile Settings</h4>
+                    </div>
+                    <div class="row mt-1" >
+                        <div class="col-md-4">
+                            <label class="labels">First Name</label><input  type="text" class="form-control"  disabled readonly value="{{ user.first_name}}"></div>
+                        <div class="col-md-4">
+                            <label class="labels">Last Name</label><input type="text" class="form-control" disabled readonly value=" {{ user.last_name}} "></div>
+                        <div class="col-md-4">
+                                <div class="col-md-12"><label class="labels">Currency</label> <div class="">
+                                    <select name="currency" class="select form-select" id="id_currency">
+                                        {% if profile.currency == 'GBP' %}
+                                            <option value="GBP" SELECTED>Pound (£)</option>
+                                        {%else %}
+                                            <option value="GBP">Pound (£)</option>
+                                        {% endif %}
+                                        {% if profile.currency == 'USD' %}
+                                            <option value="USD" SELECTED>Dollar ($)</option>
+                                        {%else %}
+                                            <option value="USD">Dollar ($)</option>
+                                        {% endif %}
+                                        {% if profile.currency == 'EURO' %}
+                                            <option value="EURO" SELECTED>Euro (€)</option>
+                                        {%else %}
+                                            <option value="EURO">Euro (€)</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12" style="padding-bottom: 15px">
+                            <label class="labels">Mobile Number</label><input  maxlength="13" type="tel"  name="mobile" class="form-control"  value="{{profile.mobile}} "></div>
+                        <div class="col-md-12" style="padding-bottom: 15px">
+                            <label class="labels">Address Line 1</label><input maxlength="50" type="text" name="address_1" class="form-control" value="{{ profile.address_1 }}"></div>
+                        <div class="col-md-12" style="padding-bottom: 15px">
+                            <label class="labels">Address Line 2</label><input maxlength="50"  type="text" name="address_2" class="form-control"  value="{{ profile.address_2 }}"></div>
+                        <div class="col-md-6" style="padding-bottom: 15px">
+                            <label class="labels">Postcode</label><input type="text" maxlength="7" name="post_code" class="form-control"  value="{{ profile.post_code }}"></div>
+                        <div class="col-md-6" style="padding-bottom: 15px">
+                            <label class="labels">State</label><input type="text" name="state" maxlength="50"  class="form-control"  value="{{ profile.state }}"></div>
+                        <div class="col-md-12" style="padding-bottom: 15px">
+                            <label class="labels">Area</label><input type="text" name="area"  maxlength="50" class="form-control" value="{{ profile.area }}"></div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-md-6"><label class="labels">Country</label><input type="text"   maxlength="50" name="country"  class="form-control"  value="{{ profile.country }}"></div>
+                        <div class="col-md-6"><label class="labels">State/Region</label><input type="text"  maxlength="50"  name="region"  class="form-control" value="{{ profile.region }}"></div>
+                    </div>
+
+                    <div class="mt-5 text-center"><button class="btn text-white color_common" type="submit">Save Profile</button></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+    </div>
+    </form>
+
+{% endblock %}
+
+

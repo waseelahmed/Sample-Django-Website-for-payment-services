@@ -1,0 +1,19 @@
+{% extends 'register/login.html' %}
+{% load crispy_forms_tags %} }
+
+
+{% block login_heading %}
+{% endblock %}
+
+
+{% block information %}
+    <p class="text-center ">
+    {{ User_info }}
+        {% if login_required %}
+            <br>Please <a href="user?action=signin">Click here</a> to sign in.
+            </p>
+            {% else %}
+            <br>Please <a href="/webapps2023">Click here</a> to go back to home page.
+    {% endif %}
+
+{% endblock %}

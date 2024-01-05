@@ -1,0 +1,102 @@
+{% extends 'administrator/admin_home.html' %}
+{% block nav %}
+    <nav class="nav nav-masthead  w-100 mx-auto  justify-content-start">
+        <!--<a class="nav-link text-white" aria-current="page" href="home">Profile</a>-->
+
+        <div class="navbar-collapse justify-content-end">
+            <div class="nav-item">
+                <form method="GET" action="/webapps2023/admin">
+                    <button type="submit" class="btn btn-outline-light">Back</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+
+{% block content %}
+    {% if transactions.has_other_pages %}
+        </br>
+        <form method="GET" action="{{request.get_full_path}}">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a type="submit" {% if transactions.has_previous %} href="?page={{ transactions.previous_page_number }}&type={{ type }}" class="page-link " {% else %} class="page-link disabled" {% endif %}  >Previous</a>
+                </li>
+                {% for item in total_page %}
+                    <li class="page-item color_common">
+                        <a type="submit" class="page-link {% if transactions.number == item %} active color_common {% endif %}" href="?page={{ item }}&type={{ type }}">{{ item }}</a>
+                    </li>
+                {% endfor %}
+
+                <li class="page-item">
+                    <a type="submit" {% if transactions.has_next %} href="?page={{ transactions.next_page_number }}&type={{ type }}" class="page-link" {% else %} class="page-link disabled" {% endif %} >Next</a>
+                </li>
+
+            </ul>
+        </nav>
+        </form>
+    {% endif %}
+    <div class="container rounded bg-light">
+    <br>
+    <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {% if type == 'sender' %} active color_common{% endif %} " id="tab-login" data-mdb-toggle="pill" href="?type=sender" role="tab" aria-controls="pills-login" aria-selected="true"> Sender</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {% if type == 'receiver' %} active color_common {% endif %} " id="tab-register" data-mdb-toggle="pill" href="?type=receiver" role="tab"
+               aria-controls="pills-register" aria-selected="true">Receiver</a>
+        </li>
+    </ul>
+        {% if transactions|length == 0 %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>No records to show.</strong>
+            </div>
+        {% else %}
+            <table class="table table-striped ">
+        <thead>
+        <tr>
+            <th class="col">ID</th>
+            <th>Title</th>
+            <th>Create date</th>
+            <th>Create Time</th>
+
+            <th>User</th>
+            <th>User Balance</th>
+            <th>Amount</th>
+            <th>User New Balance</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in transactions %}
+            <tr>
+                <td>{{ item.transaction.id }}</td>
+                <td>{{ item.transaction.title }}</td>
+                <td>{{ item.transaction.create_at }}</td>
+                <td>{{ item.transaction.time }}</td>
+                <td>
+                    {% if type == 'sender' %}
+                    {{ item.transaction.sender_id  }}
+                    {% else %}
+                    {{ item.transaction.receiver_id}}
+                    {% endif %}
+                </td>
+                <td>{{item.balance}} {{ item.currency }}</td>
+
+                <td>
+                    {% if type == 'sender' %}
+                        {{ item.transaction.transferred_amount }} {{ item.currency }}
+                    {% else %}
+                        {{ item.transaction.received_amount }} {{ item.currency }}
+                    {% endif %}
+                </td>
+                <td>{{ item.new_balance }} {{ item.currency }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        {% endif %}
+    </div>
+
+{% endblock %}
